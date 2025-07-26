@@ -32,7 +32,7 @@ jobs:
         run: sleep 5
 
       - name: Run install playwright
-        run: npx playwright install
+        run: npx playwright install chromium
       - name: start tests
         run: npx playwright test
       
