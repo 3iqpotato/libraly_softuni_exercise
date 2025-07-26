@@ -1,0 +1,14 @@
+# Node modules (инсталирани библиотеки)
+node_modules/
+
+# Логове
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# .env файлове (ако ползваш конфиденциални променливи)
+.env
+
+# Системни папки от IDE
+.idea/
+.DS_Store
