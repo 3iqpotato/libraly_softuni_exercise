@@ -1,6 +1,9 @@
 export const settings = {
-    host: 'https://libraly-softuni-exercise.onrender.com',
+    host: window.location.hostname.includes('localhost')
+        ? 'http://localhost:3000'
+        : 'https://libraly-softuni-exercise.onrender.com',
 };
+
 
 async function request(url, options) {
     try {
