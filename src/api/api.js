@@ -1,5 +1,5 @@
 export const settings = {
-    host: window.location.hostname.includes('localhost')
+    host: window.location.origin.includes('localhost')
         ? 'http://localhost:3000'
         : 'https://libraly-softuni-exercise.onrender.com',
 };
