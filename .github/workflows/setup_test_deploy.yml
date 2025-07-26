@@ -31,7 +31,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
-      statuses: write  # Допълнително разрешение само за deploy job
+      statuses: write
       deployments: write
     steps:
       - uses: actions/checkout@v3
