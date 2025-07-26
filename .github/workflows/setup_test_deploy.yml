@@ -6,56 +6,46 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+  statuses: write
+  deployments: write
+
 jobs:
-  test-and-deploy:
+  test-and-build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 18
+      - run: npm install
+      - run: npm run server &
+      - run: npm run start &
+      - run: sleep 5
+      - run: npx playwright install chromium
+      - run: npx playwright test
 
-      - name: Install dependencies
-        run: npm install
-
-      - name: Start backend server
-        run: npm run server &
-      
-      - name: Start frontend server
-        run: npm run start &
-      
-      - name: Wait for servers to start
-        run: sleep 5
-
-      - name: Install Playwright
-        run: npx playwright install chromium
-
-      - name: Run tests
-        run: npx playwright test
-
-      - name: Deploy Backend to Render
-        if: github.ref == 'refs/heads/main'
-        uses: JorgeLNJunior/render-deploy@v1.4.4
+  deploy:
+    needs: test-and-build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      statuses: write  # Допълнително разрешение само за deploy job
+      deployments: write
+    steps:
+      - uses: actions/checkout@v3
+      - uses: JorgeLNJunior/render-deploy@v1.4.4
         with:
           service_id: ${{ secrets.RENDER_BACKEND_SERVICE_ID }}
           api_key: ${{ secrets.RENDER_API_KEY }}
           wait_deploy: true
-
-      - name: Deploy Frontend to Render
-        if: github.ref == 'refs/heads/main'
-        uses: JorgeLNJunior/render-deploy@v1.4.4
+      - uses: JorgeLNJunior/render-deploy@v1.4.4
         with:
           service_id: ${{ secrets.RENDER_FRONTEND_SERVICE_ID }}
           api_key: ${{ secrets.RENDER_API_KEY }}
           wait_deploy: true
-
-      - name: Update GitHub commit status
-        if: github.ref == 'refs/heads/main'
-        uses: actions/github-script@v6
+      - uses: actions/github-script@v6
         with:
           script: |
             github.rest.repos.createCommitStatus({
