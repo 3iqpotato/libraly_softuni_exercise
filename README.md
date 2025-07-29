@@ -33,5 +33,6 @@ Built with vanilla JavaScript, using `lit-html` for templating and `page.js` for
     ```bash
    npm start
 
+Then open http://localhost:3000 in your browser.
 
-# Then open http://localhost:3000 in your browser.
+
