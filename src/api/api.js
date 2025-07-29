@@ -1,9 +1,12 @@
-export const settings = {
-    host: window.location.origin.includes('localhost')
-        ? 'http://localhost:3000'
-        : 'https://libraly-softuni-exercise.onrender.com',
-};
+// export const settings = {
+//     host: window.location.origin.includes('localhost')
+//         ? 'http://localhost:3000'
+//         : 'https://libraly-softuni-exercise.onrender.com',
+// };
 
+import * as config from '../config.js'
+
+export const settings = config.settings
 
 async function request(url, options) {
     try {
